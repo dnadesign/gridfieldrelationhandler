@@ -15,14 +15,16 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 
 	public function augmentColumns($gridField, &$columns) {
 		$state = $gridField->State->GridFieldRelationHandler;
-		if(!isset($state->RelationVal)) {
-			$state->RelationVal = 0;
-			$state->FirstTime = 1;
-		} else {
-			$state->FirstTime = 0;
-		}
-		if(!isset($state->ShowingRelation)) {
-			$state->ShowingRelation = 0;
+		if(!isset($state->FirstTime)) {
+			if(!isset($state->RelationVal)) {
+				$state->RelationVal = 0;
+				$state->FirstTime = 1;
+			} else {
+				$state->FirstTime = 0;
+			}
+			if(!isset($state->ShowingRelation)) {
+				$state->ShowingRelation = 0;
+			}
 		}
 		if($state->ShowingRelation || !$this->useToggle) {
 			if(!in_array('RelationSetter', $columns)) {
