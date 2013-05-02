@@ -5,11 +5,17 @@ class GridFieldManyRelationHandler_HasManyList extends HasManyList {
 
 	}
 
-	public function getForeignKey(HasManyList $on) {
+	public function getForeignKey(HasManyList $on = null) {
+		if(!$on) {
+			return;
+		}
 		return $on->foreignKey;
 	}
 
-	public function getForeignIDFilter(RelationList $on) {
+	public function getForeignIDFilter(RelationList $on = null) {
+		if(!$on) {
+			return;
+		}
 		return $on->foreignIDFilter();
 	}
 }
@@ -19,19 +25,31 @@ class GridFieldManyRelationHandler_ManyManyList extends ManyManyList {
 
 	}
 
-	public function getJoinTable(ManyManyList $on) {
+	public function getJoinTable(ManyManyList $on = null) {
+		if(!$on) {
+			return;
+		}
 		return $on->joinTable;
 	}
 
-	public function getLocalKey(ManyManyList $on) {
+	public function getLocalKey(ManyManyList $on = null) {
+		if(!$on) {
+			return;
+		}
 		return $on->localKey;
 	}
 
-	public function getForeignKey(ManyManyList $on) {
+	public function getForeignKey(ManyManyList $on = null) {
+		if(!$on) {
+			return;
+		}
 		return $on->foreignKey;
 	}
 
-	public function getForeignIDFilter(RelationList $on) {
+	public function getForeignIDFilter(RelationList $on = null) {
+		if(!$on) {
+			return;
+		}
 		return $on->foreignIDFilter();
 	}
 }
