@@ -1,0 +1,17 @@
+{
+	"name": "simonwelsh/gridfieldrelationhandler",
+	"description": "This module provides two GridField components that aid in managing relationships within SilverStripe.",
+	"type": "silverstripe-module",
+	"license": "BSD-3-Clause",
+	"keywords": ["silverstripe", "gridfield", "component"],
+	"authors": [
+		{
+			"name": "Simon Welsh",
+			"homepage": "http://simon.geek.nz/",
+			"email": "simon@simon.geek.nz"
+		}
+	],
+	"require": {
+		"silverstripe-framework": "~3.0"
+	}
+}
