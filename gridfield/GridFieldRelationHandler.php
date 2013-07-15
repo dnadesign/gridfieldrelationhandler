@@ -13,19 +13,29 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 		$this->useToggle = (bool)$useToggle;
 	}
 
-	public function augmentColumns($gridField, &$columns) {
-		$state = $gridField->State->GridFieldRelationHandler;
-		if(!isset($state->FirstTime)) {
-			if(!isset($state->RelationVal)) {
-				$state->RelationVal = 0;
-				$state->FirstTime = 1;
-			} else {
-				$state->FirstTime = 0;
-			}
-			if(!isset($state->ShowingRelation)) {
-				$state->ShowingRelation = 0;
-			}
+	protected function getState($gridField) {
+		static $state = null;
+		if(!$state) {
+			$state = $gridField->State->GridFieldRelationHandler;
+			$this->setupState($state);
 		}
+		return $state;
+	}
+
+	protected function setupState($state) {
+		if(!isset($state->RelationVal)) {
+			$state->RelationVal = 0;
+			$state->FirstTime = 1;
+		} else {
+			$state->FirstTime = 0;
+		}
+		if(!isset($state->ShowingRelation)) {
+			$state->ShowingRelation = 0;
+		}
+	}
+
+	public function augmentColumns($gridField, &$columns) {
+		$state = $this->getState($gridField);
 		if($state->ShowingRelation || !$this->useToggle) {
 			if(!in_array('RelationSetter', $columns)) {
 				array_unshift($columns, 'RelationSetter');
@@ -52,7 +62,7 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 	}
 
 	protected function getFields($gridField) {
-		$state = $gridField->State->GridFieldRelationHandler;
+		$state = $this->getState($gridField);
 		if(!$this->useToggle) {
 			$fields = array(
 				Object::create(
@@ -120,18 +130,18 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 	}
 
 	protected function toggleGridRelation(GridField $gridField, $arguments, $data) {
-		$state = $gridField->State->GridFieldRelationHandler;
+		$state = $this->getState($gridField);
 		$state->ShowingRelation = true;
 	}
 
 	protected function cancelGridRelation(GridField $gridField, $arguments, $data) {
-		$state = $gridField->State->GridFieldRelationHandler;
+		$state = $this->getState($gridField);
 		$state->ShowingRelation = false;
 		$state->FirstTime = true;
 	}
 
 	protected function saveGridRelation(GridField $gridField, $arguments, $data) {
-		$state = $gridField->State->GridFieldRelationHandler;
+		$state = $this->getState($gridField);
 		$state->ShowingRelation = false;
 	}
 }

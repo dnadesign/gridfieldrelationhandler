@@ -19,17 +19,21 @@ class GridFieldHasOneRelationHandler extends GridFieldRelationHandler {
 		parent::__construct(false, $targetFragment);
 	}
 
+	protected function setupState($state, $extra = null) {
+		parent::setupState($state, $extra);
+		if($state->FirstTime) {
+			$state->RelationVal = $this->onObject->{$this->relationName}()->ID;
+		}
+	}
+
 	public function getColumnContent($gridField, $record, $columnName) {
 		$class = $gridField->getModelClass();
 		if(!($class == $this->targetObject || is_subclass_of($class, $this->targetObject))) {
 			user_error($class . ' is not a subclass of ' . $this->targetObject . '. Perhaps you wanted to use ' . $this->targetObject . '::get() as the list for this GridField?', E_USER_WARNING);
 		}
 
-		$state = $gridField->State->GridFieldRelationHandler;
-		if($state->FirstTime) {
-			$state->RelationVal = $this->onObject->{$this->relationName}()->ID;
-		}
-
+		$state = $this->getState($gridField);
+		
 		$checked = $state->RelationVal == $record->ID;
 		$field = new ArrayData(array('Checked' => $checked, 'Value' => $record->ID, 'Name' => $this->relationName . 'ID'));
 		return $field->renderWith('GridFieldHasOneRelationHandlerItem');
@@ -37,7 +41,7 @@ class GridFieldHasOneRelationHandler extends GridFieldRelationHandler {
 
 	protected function saveGridRelation(GridField $gridField, $arguments, $data) {
 		$field = $this->relationName . 'ID';
-		$state = $gridField->State->GridFieldRelationHandler;
+		$state = $this->getState($gridField);
 		$id = intval("$state->RelationVal");
 		$this->onObject->{$field} = $id;
 		$this->onObject->write();
