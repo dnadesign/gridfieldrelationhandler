@@ -42,7 +42,7 @@ class GridFieldHasOneRelationHandler extends GridFieldRelationHandler {
 	protected function saveGridRelation(GridField $gridField, $arguments, $data) {
 		$field = $this->relationName . 'ID';
 		$state = $this->getState($gridField);
-		$id = intval("$state->RelationVal");
+		$id = intval($state->RelationVal);
 		$this->onObject->{$field} = $id;
 		$this->onObject->write();
 		parent::saveGridRelation($gridField, $arguments, $data);

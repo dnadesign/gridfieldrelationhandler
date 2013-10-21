@@ -14,6 +14,8 @@ http://yoursite.com/?flush=1. These components are now ready for use.
 
 ## GridFieldHasOneRelationHandler ##
 
+![](https://files.app.net/zb9sU5vs.png)
+
 The `GridFieldHasOneRelationHandler` component provides radio buttons for selecting the object that the
 has_one points to. Its constructor takes the object the relation exists on, the name of the relation and
 an optional target fragment which describes the position of the save relation button.
@@ -24,6 +26,8 @@ an optional target fragment which describes the position of the save relation bu
 	$config->addComponent(new GridFieldHasOneRelationHandler($this, 'MainImage'));
 
 ## GridFieldManyRelationHandler ##
+
+![](https://files.app.net/zb9r7VqE.png)
 
 The `GridFieldManyRelationHandler` component provides check boxes for selecting the objects that a
 has_many or many_many point to. Its constructor takes an optional target fragment which describes
