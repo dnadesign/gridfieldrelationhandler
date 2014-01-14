@@ -4,6 +4,13 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 	protected $targetFragment;
 	protected $useToggle;
 
+	protected $columnTitle = 'Relation Status';
+	protected $buttonTitles = array(
+		'SAVE_RELATION' => 'Save changes',
+		'CANCELSAVE_RELATION' => 'Cancel changes',
+		'TOGGLE_RELATION' => 'Change relation status',
+	);
+
 	public function __construct($useToggle = true, $targetFragment = 'before') {
 		$this->targetFragment = $targetFragment;
 		$this->useToggle = $useToggle;
@@ -11,6 +18,31 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 
 	public function setUseToggle($useToggle) {
 		$this->useToggle = (bool)$useToggle;
+		return $this;
+	}
+
+	public function setColumnTitle($columnTitle) {
+		$this->columnTitle = $columnTitle;
+		return $this;
+	}
+
+	public function getColumnTitle() {
+		return $this->columnTitle;
+	}
+
+	public function setButtonTitle($name, $title) {
+		$this->buttonTitles[$name] = $title;
+		return $this;
+	}
+
+	public function getButtonTitle($name) {
+		if(isset($this->buttonTitles[$name])) {
+			$value = $this->buttonTitles[$name];
+			$key = sprintf('GridFieldRelationHandler.%s-%s', $name, str_replace(' ', '', $value));
+			return _t($key, $value);
+		} else {
+			return _t('GridFieldRelationHandler.' . $name);
+		}
 	}
 
 	protected function getState($gridField) {
@@ -52,7 +84,9 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 
 	public function getColumnMetadata($gridField, $columnName) {
 		if($columnName == 'RelationSetter') {
-			return array('title' => 'Relation Status');
+			return array(
+				'title' => $this->columnTitle
+			);
 		}
 		return array();
 	}
@@ -69,7 +103,7 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 					'GridField_FormAction',
 					$gridField,
 					'relationhandler-saverel',
-					_t('GridFieldRelationHandler.SAVE_RELATION', 'Save changes'),
+					$this->getButtonTitle('SAVE_RELATION'),
 					'saveGridRelation',
 					null
 				)
@@ -80,7 +114,7 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 					'GridField_FormAction',
 					$gridField,
 					'relationhandler-cancelrel',
-					_t('GridFieldRelationHandler.CANCLSAVE_RELATION', 'Cancel changes'),
+					$this->getButtonTitle('CANCELSAVE_RELATION'),
 					'cancelGridRelation',
 					null
 				),
@@ -88,7 +122,7 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 					'GridField_FormAction',
 					$gridField,
 					'relationhandler-saverel',
-					_t('GridFieldRelationHandler.SAVE_RELATION', 'Save changes'),
+					$this->getButtonTitle('SAVE_RELATION'),
 					'saveGridRelation',
 					null
 				)
@@ -99,7 +133,7 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 					'GridField_FormAction',
 					$gridField,
 					'relationhandler-togglerel',
-					_t('GridFieldRelationHandler.TOGGLE_RELATION', 'Change relation status'),
+					$this->getButtonTitle('toggleGridRelation'),
 					'toggleGridRelation',
 					null
 				)
