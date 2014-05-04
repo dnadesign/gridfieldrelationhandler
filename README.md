@@ -44,7 +44,7 @@ it for the pagination to work properly.
 
 ## License ##
 	
-	Copyright (c) 2012, Simon Welsh - simon.geek.nz
+	Copyright (c) 2014, Simon Welsh - simon.geek.nz
 	All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
