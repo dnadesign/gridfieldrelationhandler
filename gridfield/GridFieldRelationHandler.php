@@ -133,7 +133,7 @@ abstract class GridFieldRelationHandler implements GridField_ColumnProvider, Gri
 					'GridField_FormAction',
 					$gridField,
 					'relationhandler-togglerel',
-					$this->getButtonTitle('toggleGridRelation'),
+					$this->getButtonTitle('TOGGLE_RELATION'),
 					'toggleGridRelation',
 					null
 				)
