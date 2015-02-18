@@ -6,7 +6,9 @@ class GridFieldHasOneRelationHandler extends GridFieldRelationHandler {
 
 	protected $targetObject;
 
-	public function __construct(DataObject $onObject, $relationName, $targetFragment = 'before') {
+	protected $canCancel;
+
+	public function __construct(DataObject $onObject, $relationName, $targetFragment = 'before', $canCancel = false) {
 		$this->onObject = $onObject;
 		$this->relationName = $relationName;
 
@@ -15,6 +17,8 @@ class GridFieldHasOneRelationHandler extends GridFieldRelationHandler {
 			user_error('Unable to find a has_one relation named ' . $relationName . ' on ' . $onObject->ClassName, E_USER_WARNING);
 		}
 		$this->targetObject = $hasOne;
+
+		$this->canCancel = $canCancel;
 
 		parent::__construct(false, $targetFragment);
 	}
@@ -47,4 +51,38 @@ class GridFieldHasOneRelationHandler extends GridFieldRelationHandler {
 		$this->onObject->write();
 		parent::saveGridRelation($gridField, $arguments, $data);
 	}
+
+	protected function cancelGridRelation(GridField $gridField, $arguments, $data) {
+		parent::cancelGridRelation($gridField, $arguments, $data);	
+
+		if($this->canCancel) {
+			// Delete relation
+			$field = $this->relationName . 'ID';
+			$this->onObject->{$field} = 0;
+			$this->onObject->write();
+			// Reset Gridfield
+			$state = $this->getState($gridField);
+			$state->ShowingRelation = false;
+			$state->FirstTime = true;
+			$state->RelationVal = 0;
+		} 		
+	}	
+
+	protected function getFields($gridField) {
+		$fields = parent::getFields($gridField);
+		if ($this->canCancel) {
+			$reset = Object::create(
+						'GridField_FormAction',
+						$gridField,
+						'relationhandler-resetrel',
+						'Reset',
+						'cancelGridRelation',
+						null
+					);
+			$fields->push($reset);
+		}
+		return $fields;
+	}
+
+	
 }
